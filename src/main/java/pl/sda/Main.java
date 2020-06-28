@@ -1,5 +1,10 @@
 package pl.sda;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
@@ -29,17 +34,93 @@ public class Main {
      * Uruchom aplikację.
      * Co się stało? Czy są wady takiego podejścia?
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 
         Scanner scanner = new Scanner(System.in);
         printMenu();
         String modeChoice = scanner.nextLine();
         if ("1".equals(modeChoice)) {
             System.out.println("Czy makaron jest Twoim ulubionym daniem?");
+            System.out.println("(YES, RATHER_YES, RATHER_NO, NO) ");
+            String answerString1 = scanner.nextLine();
+            Answer answer1 = null;
+            switch (answerString1){
+                case "YES": {
+                    answer1 = Answer.YES;
+                    break;
+                }
+                case "RATHER_YES": {
+                    answer1 = Answer.RATHER_YES;
+                    break;
+                }
+                case "RATHER_NO": {
+                    answer1 = Answer.RATHER_NO;
+                    break;
+                }
+                case "NO": {
+                    answer1 = Answer.NO;
+                    break;
+                }
+            }
             System.out.println("Czy pogoda ostatnio była ładna?");
+            System.out.println("(YES, RATHER_YES, RATHER_NO, NO) ");
+            String answerString2 = scanner.nextLine();
+            Answer answer2 = null;
+            switch (answerString2){
+                case "YES": {
+                    answer2 = Answer.YES;
+                    break;
+                }
+                case "RATHER_YES": {
+                    answer2 = Answer.RATHER_YES;
+                    break;
+                }
+                case "RATHER_NO": {
+                    answer2 = Answer.RATHER_NO;
+                    break;
+                }
+                case "NO": {
+                    answer2 = Answer.NO;
+                    break;
+                }
+            }
             System.out.println("Czy ostry jest cień mgły?");
+            System.out.println("(YES, RATHER_YES, RATHER_NO, NO) ");
+            String answerString3 = scanner.nextLine();
+            Answer answer3 = null;
+            switch (answerString3){
+                case "YES": {
+                    answer3 = Answer.YES;
+                    break;
+                }
+                case "RATHER_YES": {
+                    answer3 = Answer.RATHER_YES;
+                    break;
+                }
+                case "RATHER_NO": {
+                    answer3 = Answer.RATHER_NO;
+                    break;
+                }
+                case "NO": {
+                    answer3 = Answer.NO;
+                    break;
+                }
+            }
+            String completedAnswer = answer1.name() + ";" + answer2.name() + ";" + answer3.name() + "\n";
+            Files.writeString(Path.of("Answers.txt"),completedAnswer, StandardOpenOption.CREATE, StandardOpenOption.APPEND);
         } else {
-            //tutaj tryb wynikow
+            List<String> answersFromFile = Files.readAllLines(Path.of("Answers.txt"));
+            for (String answer: answersFromFile) {
+                String[] singleAnswersString = answer.split(";");
+                Answer[] answers = new Answer[singleAnswersString.length];
+                for (int i = 0; i < singleAnswersString.length; i++) {
+                    answers[i] = Answer.valueOf(singleAnswersString[i]);
+                }
+                for (int i = 0; i < answers.length; i++) {
+                    System.out.print(answers[i] + " | ");
+                }
+                System.out.println();
+            }
         }
 
     }
@@ -48,4 +129,5 @@ public class Main {
         System.out.println("1. Tryb ankiety");
         System.out.println("2. Tryb wyników");
     }
+
 }
